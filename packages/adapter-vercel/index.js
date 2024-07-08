@@ -162,7 +162,10 @@ const plugin = function (defaults = {}) {
 						},
 						plugins: [
 							replaceModulePlugin(config.buildCodeReplacement)
-						]
+						],
+						...(config.buildCodeReplacement?.inject ? {
+						inject: [require.resolve(config.buildCodeReplacement.inject)]
+						} : {})
 					});
 
 					if (result.warnings.length > 0) {
