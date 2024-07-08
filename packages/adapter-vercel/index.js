@@ -140,6 +140,8 @@ const plugin = function (defaults = {}) {
 								return {
 									contents: replacementConfig.replacementCode,
 									loader: 'js',
+									resolveDir: path.dirname(require.resolve(replacementConfig.inject.module)),
+
 								};
 							});
 						},
@@ -172,9 +174,9 @@ const plugin = function (defaults = {}) {
 						plugins: [
 							replaceModulePlugin(config.buildCodeReplacement)
 						],
-						...(config.buildCodeReplacement?.inject ? {
-						inject: [config.buildCodeReplacement.inject.module]
-						} : {})
+						// ...(config.buildCodeReplacement?.inject ? {
+						// inject: [config.buildCodeReplacement.inject.module]
+						// } : {})
 					});
 
 					if (result.warnings.length > 0) {
