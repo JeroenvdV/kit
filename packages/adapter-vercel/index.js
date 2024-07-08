@@ -120,11 +120,15 @@ const plugin = function (defaults = {}) {
 
 				try {
 
+					let moduleResolvePath = "empty";
+
 					const replaceModulePlugin = (replacementConfig) => ({
 						name: 'replace-sentry-import',
 						setup(build) {
 							// Intercept import paths for the specific module you want to replace
 							build.onResolve({ filter: replacementConfig.filter }, args => {
+								moduleResolvePath = args.resolveDir;
+								console.log('moduleResolvePath', moduleResolvePath);
 								return { path: args.path, namespace: 'replace' };
 							});
 
@@ -137,12 +141,14 @@ const plugin = function (defaults = {}) {
 	
 							// Load the noop code instead of the external module
 							build.onLoad({ filter: /.*/, namespace: 'replace' }, () => {
-								return {
+								const result = {
 									contents: replacementConfig.replacementCode,
 									loader: 'js',
-									resolveDir: path.dirname(require.resolve(replacementConfig.inject.module)),
+									resolveDir: moduleResolvePath
 
-								};
+								}
+								console.log('result', result);
+								return result;
 							});
 						},
 					});
