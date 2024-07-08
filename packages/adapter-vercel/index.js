@@ -127,6 +127,13 @@ const plugin = function (defaults = {}) {
 							build.onResolve({ filter: replacementConfig.filter }, args => {
 								return { path: args.path, namespace: 'replace' };
 							});
+
+							    // Intercept import paths for the replacement module
+    build.onResolve({ filter: replacementConfig.inject.filter }, (args) => {
+		return {
+		  path: require.resolve(replacementConfig.inject.module),
+		};
+	  });
 	
 							// Load the noop code instead of the external module
 							build.onLoad({ filter: /.*/, namespace: 'replace' }, () => {
@@ -163,9 +170,9 @@ const plugin = function (defaults = {}) {
 						plugins: [
 							replaceModulePlugin(config.buildCodeReplacement)
 						],
-						...(config.buildCodeReplacement?.inject ? {
-						inject: [require.resolve(config.buildCodeReplacement.inject)]
-						} : {})
+						// ...(config.buildCodeReplacement?.inject ? {
+						// inject: [require.resolve(config.buildCodeReplacement.inject)]
+						// } : {})
 					});
 
 					if (result.warnings.length > 0) {
