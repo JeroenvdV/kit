@@ -173,7 +173,7 @@ const plugin = function (defaults = {}) {
 							replaceModulePlugin(config.buildCodeReplacement)
 						],
 						...(config.buildCodeReplacement?.inject ? {
-						inject: [require.resolve(config.buildCodeReplacement.inject.module)]
+						inject: [config.buildCodeReplacement.inject.module]
 						} : {})
 					});
 
