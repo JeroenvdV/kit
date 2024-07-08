@@ -119,24 +119,6 @@ const plugin = function (defaults = {}) {
 				);
 
 				try {
-
-					const replaceModulePlugin = (replacementConfig) => ({
-						name: 'replace-sentry-import',
-						setup(build) {
-							// Intercept import paths for the specific module you want to replace
-							build.onResolve({ filter: replacementConfig.filter }, args => {
-								return { path: args.path, namespace: 'replace' };
-							});
-	
-							// Load the noop code instead of the external module
-							build.onLoad({ filter: /.*/, namespace: 'replace' }, () => {
-								return {
-									contents: replacementConfig.replacementCode,
-									loader: 'js',
-								};
-							});
-						},
-					});
 	
 					const result = await esbuild.build({
 						entryPoints: [`${tmp}/edge.js`],
@@ -159,10 +141,7 @@ const plugin = function (defaults = {}) {
 							'.ttf': 'copy',
 							'.eot': 'copy',
 							'.otf': 'copy'
-						},
-						plugins: [
-							replaceModulePlugin(config.buildCodeReplacement)
-						]
+						}, alias: config.buildModuleAliases
 					});
 
 					if (result.warnings.length > 0) {
