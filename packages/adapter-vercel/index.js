@@ -144,6 +144,8 @@ const plugin = function (defaults = {}) {
 							});
 						},
 					});
+
+					console.log(JSON.stringify(config.buildCodeReplacement, null, 2));
 	
 					const result = await esbuild.build({
 						entryPoints: [`${tmp}/edge.js`],
